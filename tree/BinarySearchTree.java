@@ -131,4 +131,28 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>> {
         }
         return t;
     }
+
+    public void printTree() {
+        if (isEmpty()) {
+            System.out.print("Empty Tree");
+        } else {
+            printTree(root);
+        }
+    }
+
+    private void printTree(BinaryNode<AnyType> t) {
+        if (t != null) {
+            printTree(t.left);
+            System.out.print(t.element);
+            printTree(t.right);
+        }
+    }
+
+    private int height(BinaryNode<AnyType> t) {
+        if (t == null) {
+            return -1;
+        } else {
+            return 1 + Math.max(height(t.left) , height(t.right));
+        }
+    }
 }
