@@ -1,14 +1,11 @@
 package com.meizu.thirdparty;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 /**
  * @describe :
  * @usage :
  * <p>
  * </p>
- * Created by caixi on 17-11-8.
+ * Created by caixi on 17-11-28.
  */
 
 public class UnComparableSortArray {
@@ -20,9 +17,9 @@ public class UnComparableSortArray {
      *
      * reference : https://www.cnblogs.com/zer0Black/p/6169858.html
      */
-    public int[] countSort(int[] array) {
-        if (array == null || array.length ==0) {
-            return array;
+    public static void countSort(int[] array) {
+        if (array == null || array.length == 0) {
+            return;
         }
 
         int max = Integer.MIN_VALUE;
@@ -49,45 +46,35 @@ public class UnComparableSortArray {
             }
         }
 
-        return array;
     }
 
     /*
      * 桶排序 :
      *
-     * reference : http://blog.csdn.net/u010853261/article/details/54933236
+     * reference : http://www.cnblogs.com/skywang12345/p/3602737.html
      */
-    public int[] bucketSort(int[] arr) {
-        if (arr == null || arr.length ==0) {
-            return arr;
-        }
+    public static void bucketSort(int[] arr, int max) {
+        int[] buckets;
 
-        int max = Integer.MIN_VALUE;
-        int min = Integer.MAX_VALUE;
-        for(int i = 0; i < arr.length; i++){
-            max = Math.max(max, arr[i]);
-            min = Math.min(min, arr[i]);
-        }
+        if (arr == null || arr.length == 0 || max < 1)
+            return;
 
-        // 数组大小是100
-        int[] sorted = new int[max+1];
+        // 创建一个容量为max的数组buckets，并且将buckets中的所有数据都初始化为0。
+        buckets = new int[max];
 
-        for(int i=0; i<arr.length; i++){
-            sorted[arr[i]] = arr[i];//把数据放到对应索引的位置
-        }
+        // 1. 计数
+        for (int i = 0; i < arr.length; i++)
+            buckets[arr[i]]++;
 
-        // 所以这里还得建一个数组来承接
-        int[] bucketArr = new int[arr.length];
-        int m = 0;
-        for (Integer i : sorted) {
-            if (i > 0) {
-                bucketArr[m] = i;
-                m++;
+        // 2. 排序
+        for (int i = 0, j = 0; i < max; i++) {
+            while ((buckets[i]--) > 0) {
+                arr[j++] = i;
             }
         }
 
+        buckets = null;
 
-        return bucketArr;
     }
 
     /*
@@ -97,9 +84,9 @@ public class UnComparableSortArray {
      * https://www.cnblogs.com/Braveliu/archive/2013/01/21/2870201.html
      * https://www.cnblogs.com/haozhengfei/p/29ba40edbf659f2dbc6b429c2818c594.html
      */
-    public int[] radixSort(int[] arr) {
-        if (arr == null || arr.length ==0) {
-            return arr;
+    public static void radixSort(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return;
         }
 
         int length = arr.length;
@@ -115,7 +102,7 @@ public class UnComparableSortArray {
             int k = 0;// 被排序数组的下标
             for (int b = 0; b < 10; b++) {// 从0到9号桶按照顺序取出
                 if (count[b] == 0)// 如果这个桶中没有元素放入，那么跳过
-                continue;
+                    continue;
                 for (int w = 0; w < count[b]; w++) {
                     arr[k++] = bucket[b][w];
                 }
@@ -123,6 +110,23 @@ public class UnComparableSortArray {
             }
             divisor *= 10;
         }
-        return arr;
+    }
+
+    public static void main(String[] args) {
+        int i;
+        int[] a = {20, 40, 30, 10, 60, 50};
+        System.out.printf("before sort:");
+        for (i = 0; i < a.length; i++)
+            System.out.printf("%d ", a[i]);
+        System.out.printf("\n");
+
+//        countSort(a);
+//        bucketSort(a, 100);
+        radixSort(a);
+
+        System.out.printf("after  sort:");
+        for (i = 0; i < a.length; i++)
+            System.out.printf("%d ", a[i]);
+        System.out.printf("\n");
     }
 }
